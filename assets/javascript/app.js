@@ -30,6 +30,7 @@ var gameStarted = false;
 var correct;
 var incorrect;
 var currentQuestion;
+var timesUp;
 
 
 $(document).ready(function(){
@@ -41,9 +42,24 @@ $(document).ready(function(){
             $(this).attr("class", "hide");
             startGame();
             getQuestion();
+            popAnswers();
 
         }   
     });
+
+    $(".selection").on("click", function(){
+        clearTimeout(timesUp);
+        if ($(this).text() === currentQuestion.answer.answer){
+            correct++;
+        }else{
+            incorrect++;
+        }
+        getQuestion();
+        popAnswers();
+        updateScore();
+        checkGameEnd();
+    });
+
 
 });
 
@@ -53,8 +69,7 @@ function startGame (){
     gameStarted = true;
     correct = 0;
     incorrect = 0;
-    $(".correct").html(correct);
-    $(".incorrect").html(incorrect);
+    updateScore();
 
     //get question
 
@@ -67,7 +82,41 @@ function getQuestion (){
 }
 
 function popAnswers(){
-    $("optiona").text(currentQuestion.answer.a);
+    $(".optiona").text(currentQuestion.answer.a);
+    $(".optionb").text(currentQuestion.answer.b);
+    $(".optionc").text(currentQuestion.answer.c);
+    $(".optiond").text(currentQuestion.answer.d);
+    timesUp = setTimeout(timedOut, 5000);
+}
 
+function updateScore(){
+    $(".correct").html(correct);
+    $(".incorrect").html(incorrect);
+}
 
+function checkGameEnd (){
+    if(correct+incorrect === 5){
+        if(correct > incorrect){
+            alert("You win!");
+        }else{
+            alert("You lose!");
+        }
+        gameStarted=false;
+        currentQuestion = {};
+        clearTimeout(timesUp);
+        $(".optiona").text("");
+        $(".optionb").text("");
+        $(".optionc").text("");
+        $(".optiond").text("");
+        $("#question-header").text("");
+        $("#start-game").removeClass("hide");
+    }
+}
+
+function timedOut () {
+    getQuestion();
+    popAnswers();
+    incorrect ++;
+    updateScore();
+    checkGameEnd();
 }
