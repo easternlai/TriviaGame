@@ -31,6 +31,7 @@ var correct;
 var incorrect;
 var currentQuestion;
 var timesUp;
+var userTimedOut = false;
 
 
 $(document).ready(function(){
@@ -41,8 +42,8 @@ $(document).ready(function(){
         if(!gameStarted){
             $(this).attr("class", "hide");
             startGame();
-            getQuestion();
-            popAnswers();
+            newQuestion();
+
 
         }   
     });
@@ -54,10 +55,7 @@ $(document).ready(function(){
         }else{
             incorrect++;
         }
-        getQuestion();
-        popAnswers();
-        updateScore();
-        checkGameEnd();
+        setTimeout(newQuestion,5000);
     });
 
 
@@ -77,8 +75,11 @@ function startGame (){
 }
 
 function getQuestion (){
-    currentQuestion = QnA[Math.floor(Math.random() * QnA.length)];
+    var index = Math.floor(Math.random() * QnA.length);
+    currentQuestion = QnA[index];
     $("#question-header").text(currentQuestion.question.q);
+    QnA.splice(index, 1);
+
 }
 
 function popAnswers(){
@@ -86,7 +87,8 @@ function popAnswers(){
     $(".optionb").text(currentQuestion.answer.b);
     $(".optionc").text(currentQuestion.answer.c);
     $(".optiond").text(currentQuestion.answer.d);
-    timesUp = setTimeout(timedOut, 5000);
+    
+
 }
 
 function updateScore(){
@@ -114,9 +116,21 @@ function checkGameEnd (){
 }
 
 function timedOut () {
+    incorrect ++;
+    newQuestion();
+    userTimedOut = true;
+
+}
+
+function startTimer (){
+    timesUp = setTimeout(timedOut, 5000);
+
+}
+
+function newQuestion(){
+    updateScore();
     getQuestion();
     popAnswers();
-    incorrect ++;
-    updateScore();
+    startTimer ();
     checkGameEnd();
 }
