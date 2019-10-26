@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<body>
+
+    <div class="container">
+        <div class="jumbotron jumbotron-fluid">
+            <div class="container">
+                <h1 class="display-4">FRIENDS TRIVIA</h1>
+                <p class="lead">The unofficial FRIENDS trivia website.</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h1 id="start-game">Click Here to begin!</h1>
+                        <h1 id="question-header"></h1>
+                    </div>
+                    <div class="card-body">
+                    <p class="card-text answer optiona"></p>
+                    <p class="card-text answer optionb"></p>
+                    <p class="card-text answer optionc"></p>
+                    <p class="card-text answer optiond"></p>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Score</h4>
+                    </div>
+                    <div class="card-body">
+                    <p class="card-text">Correct answers: <span class="correct"></span></p>
+                    <p class="card-text">Incorrect answers: <span class="incorrect"></span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="assets/javascript/app.js"></script>
+</html>
