@@ -1,3 +1,32 @@
+body{
+    font-family: 'Poppins', sans-serif;
+    background-color: gainsboro;
+}
+
 .hide{
     display: none;
 }
+
+.main-header{
+    background-color: black;
+    color:burlywood;
+    font-family: 'Roboto Mono', monospace;
+}
+
+#logo{
+    font-family: 'Permanent Marker', monospace;
+    letter-spacing: 10px;
+    color: white;
+}
+
+.selection-correct{
+    background-color: green;
+}
+
+.selection-incorrect{
+    background-color: red;
+}
+
+/* font-family: 'Permanent Marker', cursive;
+font-family: 'Roboto Mono', monospace;
+font-family: 'Poppins', sans-serif; */

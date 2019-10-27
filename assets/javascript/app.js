@@ -26,18 +26,31 @@ var QnA = [
 
 ];
 
+//tracks if game has been started.
 var gameStarted = false;
+
+//tracks users correct and incorrect guesses.
 var correct;
 var incorrect;
+
+//points to one object in the array of questions (QnA).
 var currentQuestion;
+
+//used to reset if time is up for user's guess.
 var timesUp;
+
+//tracks if the user timed out on previous turn.
 var userTimedOut = false;
+
 var that;
+
+//used to track if users click occurs during or not during a period where they should select an answer.
 var answerInterval = true;
 
 
 $(document).ready(function(){
 
+    //starts game
     $("#start-game").on("click", function(){
         that = this;
 
@@ -47,8 +60,11 @@ $(document).ready(function(){
             newQuestion();
         }   
     });
-
+    //registers click of user selection
     $(".selection").on("click", function(){
+        that = this;
+
+        //prevents user from enter selection multiple times
         if(answerInterval === true){
             answerInterval = false;
             resetTimeout();
@@ -57,8 +73,14 @@ $(document).ready(function(){
             }else{
                 userIncorrect();
             }
+
+            //fixed bug of user score not registering immediately after selection.
             updateScore();
+
+            //fixed bug of user having to wait post answer timeout period.
             checkGameEnd();
+
+            //calls new question and binds it to timeout period.
             setTimeout(newQuestion,5000);
         }
     });
@@ -66,9 +88,9 @@ $(document).ready(function(){
 
 });
 
+//starts game and hides "Start Game" text after selecteed.  Only run once in program.
 function startGame (){
     
-    //resets score
     gameStarted = true;
     correct = 0;
     incorrect = 0;
@@ -78,6 +100,7 @@ function startGame (){
 
 }
 
+//gets question and splices question out of array to prevent same question being asked twice.
 function getQuestion (){
     var index = Math.floor(Math.random() * QnA.length);
     currentQuestion = QnA[index];
@@ -86,6 +109,7 @@ function getQuestion (){
 
 }
 
+//populates answer selections.
 function popAnswers(){
     $(".optiona").text(currentQuestion.answer.a);
     $(".optionb").text(currentQuestion.answer.b);
@@ -95,11 +119,14 @@ function popAnswers(){
 
 }
 
+//updates scoreboard
 function updateScore(){
     $(".correct").html(correct);
     $(".incorrect").html(incorrect);
 }
 
+
+//Checks if game is over
 function checkGameEnd (){
     if(correct+incorrect === 5){
         if(correct > incorrect){
@@ -115,43 +142,59 @@ function checkGameEnd (){
        }
 }
 
+//called when user is timed out of an answer. increments number of incorrect responses, updates the score, displays timeout message, and calls a new question with a new timeout.
 function timedOut () {
     answerInterval= false;
     incorrect ++;
     updateScore();
     $("#question-header").text("Time's up! the correct answer is: " + currentQuestion.answer.answer);
+
+    //fixed bug of timeout not working before making first selection.
     setTimeout(newQuestion,5000);
 
 }
 
+//used to put timer on each question.
 function startTimer (){
     timesUp = setTimeout(timedOut, 5000);
 
 }
 
+//used to reset timeout and toggle userTimedout to false.
 function resetTimeout (){
     clearTimeout(timesUp);
     userTimedout = false;
 }
 
+//triggers new question
 function newQuestion(){
+
+    //changes color of user selection to green or red based or correct and incorrect response.
+    $(that).removeClass("selection-correct");
+    $(that).removeClass("selection-incorrect");
     updateScore();
     getQuestion();
     popAnswers();
     startTimer ();
     checkGameEnd();
+
+    //fixed bug of user being able to make multiple selections during same question.  
     answerInterval=true;
 }
 
+//used when user answers correctly
 function userCorrect(){
     correct++;
     $("#question-header").text("You are correct!");
+    $(that).addClass("selection-correct");
 
 }
 
+//used when user answers incorrectly
 function userIncorrect(){
     incorrect++;
     $("#question-header").text("Wrong! the correct answer is: " + currentQuestion.answer.answer);
+    $(that).addClass("selection-incorrect");
 
 }
 
