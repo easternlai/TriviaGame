@@ -33,6 +33,7 @@ var currentQuestion;
 var timesUp;
 var userTimedOut = false;
 var that;
+var answerInterval = true;
 
 
 $(document).ready(function(){
@@ -48,14 +49,18 @@ $(document).ready(function(){
     });
 
     $(".selection").on("click", function(){
-        resetTimeout();
-        if ($(this).text() === currentQuestion.answer.answer){
-            userCorrect();
-        }else{
-            userIncorrect();
+        if(answerInterval === true){
+            answerInterval = false;
+            resetTimeout();
+            if ($(this).text() === currentQuestion.answer.answer){
+                userCorrect();
+            }else{
+                userIncorrect();
+            }
+            updateScore();
+            checkGameEnd();
+            setTimeout(newQuestion,5000);
         }
-        updateScore();
-        setTimeout(newQuestion,5000);
     });
 
 
@@ -98,23 +103,20 @@ function updateScore(){
 function checkGameEnd (){
     if(correct+incorrect === 5){
         if(correct > incorrect){
-            alert("You win!");
+            $("#question-header").text("You Win!");
         }else{
-            alert("You lose!");
+            $("#question-header").text("You Lose!");
         }
-        gameStarted=false;
-        currentQuestion = {};
         resetTimeout();
         $(".optiona").text("");
         $(".optionb").text("");
         $(".optionc").text("");
         $(".optiond").text("");
-        $("#question-header").text("");
-        $("#start-game").removeClass("hide");
-    }
+       }
 }
 
 function timedOut () {
+    answerInterval= false;
     incorrect ++;
     updateScore();
     $("#question-header").text("Time's up! the correct answer is: " + currentQuestion.answer.answer);
@@ -138,6 +140,7 @@ function newQuestion(){
     popAnswers();
     startTimer ();
     checkGameEnd();
+    answerInterval=true;
 }
 
 function userCorrect(){
