@@ -32,29 +32,29 @@ var incorrect;
 var currentQuestion;
 var timesUp;
 var userTimedOut = false;
+var that;
 
 
 $(document).ready(function(){
 
     $("#start-game").on("click", function(){
+        that = this;
 
         //hides prompt for user to click to start and starts game.
         if(!gameStarted){
-            $(this).attr("class", "hide");
             startGame();
             newQuestion();
-
-
         }   
     });
 
     $(".selection").on("click", function(){
-        clearTimeout(timesUp);
+        resetTimeout();
         if ($(this).text() === currentQuestion.answer.answer){
-            correct++;
+            userCorrect();
         }else{
-            incorrect++;
+            userIncorrect();
         }
+        updateScore();
         setTimeout(newQuestion,5000);
     });
 
@@ -68,8 +68,7 @@ function startGame (){
     correct = 0;
     incorrect = 0;
     updateScore();
-
-    //get question
+    $(that).attr("class", "hide");
 
 
 }
@@ -105,7 +104,7 @@ function checkGameEnd (){
         }
         gameStarted=false;
         currentQuestion = {};
-        clearTimeout(timesUp);
+        resetTimeout();
         $(".optiona").text("");
         $(".optionb").text("");
         $(".optionc").text("");
@@ -117,14 +116,20 @@ function checkGameEnd (){
 
 function timedOut () {
     incorrect ++;
-    newQuestion();
-    userTimedOut = true;
+    updateScore();
+    $("#question-header").text("Time's up! the correct answer is: " + currentQuestion.answer.answer);
+    setTimeout(newQuestion,5000);
 
 }
 
 function startTimer (){
     timesUp = setTimeout(timedOut, 5000);
 
+}
+
+function resetTimeout (){
+    clearTimeout(timesUp);
+    userTimedout = false;
 }
 
 function newQuestion(){
@@ -134,3 +139,16 @@ function newQuestion(){
     startTimer ();
     checkGameEnd();
 }
+
+function userCorrect(){
+    correct++;
+    $("#question-header").text("You are correct!");
+
+}
+
+function userIncorrect(){
+    incorrect++;
+    $("#question-header").text("Wrong! the correct answer is: " + currentQuestion.answer.answer);
+
+}
+
